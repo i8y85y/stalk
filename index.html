@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Переходник STALKER - Показывай свои моды всем сталкерам</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #1a5f23;
+            --secondary: #2d2d2d;
+            --accent: #e3b23c;
+            --accent-glow: #ffd700;
+            --light: #f5f5f5;
+            --dark: #1a1a1a;
+            --gray: #7a7a7a;
+            --danger: #c33c3c;
+            --success: #3ca54c;
+        }
+        
+        body {
+            background-color: #0a0a0a;
+            color: #ddd;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(26, 95, 35, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(227, 178, 60, 0.1) 0%, transparent 50%),
+                linear-gradient(rgba(10, 10, 10, 0.95), rgba(10, 10, 10, 0.95)),
+                url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Тени и свечения */
+        .shadow-glow {
+            box-shadow: 
+                0 0 20px rgba(227, 178, 60, 0.3),
+                0 0 40px rgba(26, 95, 35, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .text-glow {
+            text-shadow: 0 0 10px rgba(227, 178, 60, 0.7);
+        }
+        
+        .border-glow {
+            border: 1px solid rgba(227, 178, 60, 0.3);
+            box-shadow: 0 0 15px rgba(227, 178, 60, 0.2);
+        }
+        
+        /* Шапка */
+        header {
+            background-color: rgba(10, 15, 10, 0.95);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--accent);
+            box-shadow: 0 0 30px rgba(227, 178, 60, 0.2);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            color: var(--accent);
+            font-size: 2.5rem;
+            filter: drop-shadow(0 0 10px rgba(227, 178, 60, 0.7));
+        }
+        
+        .logo-text h1 {
+            color: var(--accent);
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(227, 178, 60, 0.8);
+        }
+        
+        .logo-text p {
+            color: var(--light);
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            padding: 5px 10px;
+            border-radius: 3px;
+            position: relative;
+        }
+        
+        nav a:hover {
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(227, 178, 60, 0.7);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-glow));
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent), #d19c2a);
+            color: var(--dark);
+            box-shadow: 0 5px 15px rgba(227, 178, 60, 0.4);
+        }
+        
+        .btn-accent:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(227, 178, 60, 0.6);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #0f4a1a);
+            color: white;
+            box-shadow: 0 5px 15px rgba(26, 95, 35, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(26, 95, 35, 0.6);
+        }
+        
+        /* Основной контент */
+        main {
+            padding: 40px 0;
+        }
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+            background-color: rgba(10, 15, 10, 0.8);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 0 40px rgba(227, 178, 60, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(227, 178, 60, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        .hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+            text-shadow: 
+                0 0 10px rgba(227, 178, 60, 0.7),
+                0 0 20px rgba(227, 178, 60, 0.4);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .hero h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            color: #eee;
+        }
+        
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .share-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 25px;
+            background-color: rgba(45, 45, 45, 0.9);
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .share-btn:hover {
+            background-color: var(--accent);
+            color: var(--dark);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(227, 178, 60, 0.4);
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: var(--accent);
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-shadow: 0 0 10px rgba(227, 178, 60, 0.5);
+        }
+        
+        .section-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+        }
+        
+        .section-title i {
+            font-size: 1.8rem;
+            color: var(--accent-glow);
+        }
+        
+        /* Секция модов */
+        .mods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .mod-card {
+            background-color: rgba(20, 25, 20, 0.9);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s;
+            position: relative;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .mod-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .mod-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.7),
+                0 0 30px rgba(227, 178, 60, 0.3);
+        }
+        
+        .mod-card:hover::before {
+            opacity: 1;
+        }
+        
+        .mod-image {
+            height: 200px;
+            background-color: #222;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .mod-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(to top, rgba(20, 25, 20, 0.9), transparent);
+        }
+        
+        .mod-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s;
+        }
+        
+        .mod-image .placeholder {
+            font-size: 4rem;
+            color: var(--accent);
+            filter: drop-shadow(0 0 10px rgba(227, 178, 60, 0.5));
+        }
+        
+        .mod-card:hover .mod-image img {
+            transform: scale(1.1);
+        }
+        
+        .mod-content {
+            padding: 25px;
+            position: relative;
+        }
+        
+        .mod-title {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: var(--accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-shadow: 0 0 5px rgba(227, 178, 60, 0.3);
+        }
+        
+        .mod-game {
+            background: linear-gradient(135deg, var(--primary), #0f4a1a);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(26, 95, 35, 0.3);
+        }
+        
+        .mod-description {
+            margin-bottom: 20px;
+            color: #ccc;
+            height: 85px;
+            overflow: hidden;
+            line-height: 1.5;
+        }
+        
+        .mod-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .author-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--dark);
+            box-shadow: 0 3px 10px rgba(26, 95, 35, 0.3);
+        }
+        
+        .mod-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .mod-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .mod-stat i {
+            color: var(--accent);
+        }
+        
+        .download-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+            background: linear-gradient(135deg, var(--primary), #0f4a1a);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 5px 15px rgba(26, 95, 35, 0.3);
+        }
+        
+        .download-btn:hover {
+            background: linear-gradient(135deg, #0f4a1a, var(--primary));
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(26, 95, 35, 0.5);
+        }
+        
+        /* Форма загрузки мода */
+        .upload-section {
+            background-color: rgba(20, 25, 20, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 50px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(227, 178, 60, 0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--accent);
+            text-shadow: 0 0 5px rgba(227, 178, 60, 0.3);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            background-color: rgba(10, 15, 10, 0.8);
+            border: 1px solid rgba(227, 178, 60, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(227, 178, 60, 0.3);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        /* Подвал */
+        footer {
+            background-color: rgba(10, 15, 10, 0.95);
+            padding: 50px 0 20px;
+            margin-top: 70px;
+            border-top: 2px solid var(--accent);
+            box-shadow: 0 -10px 30px rgba(227, 178, 60, 0.1);
+            position: relative;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--primary), var(--accent));
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            color: var(--accent);
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            text-shadow: 0 0 10px rgba(227, 178, 60, 0.5);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .footer-column ul li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+        
+        .footer-column ul li a {
+            color: #bbb;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(227, 178, 60, 0.5);
+            padding-left: 5px;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .mods-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+            
+            .share-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .upload-section {
+                padding: 25px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .mods-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+        }
+        
+        .active {
+            color: var(--accent) !important;
+            text-shadow: 0 0 10px rgba(227, 178, 60, 0.7) !important;
+        }
+        
+        .active::after {
+            width: 100% !important;
+        }
+        
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1001;
+            overflow: auto;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background-color: rgba(20, 25, 20, 0.95);
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            position: relative;
+            box-shadow: 
+                0 0 50px rgba(227, 178, 60, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(227, 178, 60, 0.3);
+            animation: modalAppear 0.5s ease-out;
+        }
+        
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 2rem;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .close-modal:hover {
+            color: var(--accent);
+            background-color: rgba(227, 178, 60, 0.1);
+            transform: rotate(90deg);
+        }
+        
+        /* Уведомление */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 20px 30px;
+            background: linear-gradient(135deg, var(--primary), #0f4a1a);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(26, 95, 35, 0.5);
+            z-index: 1002;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transform: translateX(150%);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, var(--success), #2a8c3a);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(60, 165, 76, 0.5);
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, var(--danger), #a32c2c);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(195, 60, 60, 0.5);
+        }
+        
+        /* Кнопка поделиться модом */
+        .share-mod-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--accent), #d19c2a);
+            color: var(--dark);
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(227, 178, 60, 0.3);
+        }
+        
+        .share-mod-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(227, 178, 60, 0.5);
+        }
+        
+        /* Бейдж нового мода */
+        .new-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #ff3300, #ff6600);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 1;
+            box-shadow: 0 5px 15px rgba(255, 51, 0, 0.4);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 5px 15px rgba(255, 51, 0, 0.4); }
+            50% { box-shadow: 0 5px 20px rgba(255, 51, 0, 0.7); }
+            100% { box-shadow: 0 5px 15px rgba(255, 51, 0, 0.4); }
+        }
+        
+        /* Заглушка для изображений */
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .image-placeholder i {
+            font-size: 3rem;
+            color: var(--accent);
+            filter: drop-shadow(0 0 10px rgba(227, 178, 60, 0.5));
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-radiation-alt"></i>
+                </div>
+                <div class="logo-text">
+                    <h1 class="text-glow">ПЕРЕХОДНИК STALKER</h1>
+                    <p>Показывай свои моды всем сталкерам</p>
+                </div>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#" class="active" id="home-link"><i class="fas fa-home"></i> Все моды</a></li>
+                    <li><a href="#" id="upload-link"><i class="fas fa-upload"></i> Показать свой мод</a></li>
+                    <li><a href="#" id="new-mods-link"><i class="fas fa-star"></i> Новые моды</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="container">
+        <!-- Герой-секция -->
+        <section class="hero" id="hero-section">
+            <h2 class="text-glow">Покажи свои моды всему сталкер-сообществу!</h2>
+            <p>Загрузи свой мод и он сразу станет виден всем. Новые моды появляются вверху списка без всяких ссылок — просто загружай и твой мод увидят!</p>
+            
+            <div class="share-buttons">
+                <a href="#" class="share-btn" id="share-vk">
+                    <i class="fab fa-vk"></i> Поделиться ВКонтакте
+                </a>
+                <a href="#" class="share-btn" id="share-telegram">
+                    <i class="fab fa-telegram"></i> Отправить в Telegram
+                </a>
+                <a href="#" class="share-btn" id="share-discord">
+                    <i class="fab fa-discord"></i> Опубликовать в Discord
+                </a>
+            </div>
+        </section>
+
+        <!-- Секция всех модов -->
+        <section id="all-mods-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h2 class="section-title"><i class="fas fa-globe"></i> Все моды сообщества</h2>
+                <div style="font-size: 0.9rem; color: #aaa; background-color: rgba(20, 25, 20, 0.8); padding: 10px 20px; border-radius: 20px; border: 1px solid rgba(227, 178, 60, 0.2);">
+                    <i class="fas fa-eye"></i> <span id="total-views">0</span> просмотров всех модов
+                </div>
+            </div>
+            
+            <div class="mods-grid" id="mods-container">
+                <!-- Моды загружаются через JavaScript -->
+            </div>
+        </section>
+
+        <!-- Секция новых модов -->
+        <section id="new-mods-section" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h2 class="section-title"><i class="fas fa-star"></i> Новые моды (без ссылок)</h2>
+                <div style="font-size: 0.9rem; color: var(--accent); background-color: rgba(20, 25, 20, 0.8); padding: 10px 20px; border-radius: 20px; border: 1px solid rgba(227, 178, 60, 0.3);">
+                    <i class="fas fa-bolt"></i> Самые свежие публикации
+                </div>
+            </div>
+            
+            <div class="mods-grid" id="new-mods-container">
+                <!-- Новые моды загружаются через JavaScript -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="btn btn-accent" id="show-all-mods-btn">
+                    <i class="fas fa-list"></i> Показать все моды
+                </button>
+            </div>
+        </section>
+
+        <!-- Секция загрузки мода -->
+        <section id="upload-section" style="display: none;">
+            <h2 class="section-title"><i class="fas fa-upload"></i> Показать свой мод всем</h2>
+            
+            <div class="upload-section">
+                <p style="margin-bottom: 30px; padding: 20px; background-color: rgba(227, 178, 60, 0.1); border-radius: 10px; border-left: 4px solid var(--accent);">
+                    <i class="fas fa-info-circle"></i> <strong>Ваш мод сразу увидят все!</strong> После загрузки он появится вверху списка "Новые моды" без всяких ссылок — просто загружай и показывай.
+                </p>
+                
+                <form id="mod-upload-form">
+                    <div class="form-group">
+                        <label for="author-name">Твое имя или псевдоним *</label>
+                        <input type="text" id="author-name" class="form-control" placeholder="Например: Стрелок, Меченый или ZoneModder" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mod-name">Название мода *</label>
+                        <input type="text" id="mod-name" class="form-control" placeholder="Например: 'Реалистичные аномалии' или 'Новое оружие'" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mod-game">Для какой игры *</label>
+                        <select id="mod-game" class="form-control" required>
+                            <option value="">Выберите игру</option>
+                            <option value="Тень Чернобыля">S.T.A.L.K.E.R.: Тень Чернобыля</option>
+                            <option value="Чистое Небо">S.T.A.L.K.E.R.: Чистое Небо</option>
+                            <option value="Зов Припяти">S.T.A.L.K.E.R.: Зов Припяти</option>
+                            <option value="АНТОЛОГИЯ">АНТОЛОГИЯ (все части)</option>
+                            <option value="Anomaly">Anomaly</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mod-description">Описание мода *</label>
+                        <textarea id="mod-description" class="form-control" placeholder="Подробно опишите что делает ваш мод, какие изменения вносит, особенности установки и т.д." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mod-version">Версия мода</label>
+                        <input type="text" id="mod-version" class="form-control" placeholder="Например: 1.0 или beta 0.5">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="download-link">Ссылка для скачивания (необязательно)</label>
+                        <input type="url" id="download-link" class="form-control" placeholder="https://... (можно добавить позже)">
+                        <small style="color: #aaa;">Можно оставить пустым — мод все равно увидят все!</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mod-image">Ссылка на изображение (превью, необязательно)</label>
+                        <input type="url" id="mod-image" class="form-control" placeholder="https://... (можно оставить пустым)">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-accent" style="width: 100%; padding: 18px; font-size: 1.2rem; margin-top: 10px;">
+                        <i class="fas fa-broadcast-tower"></i> ПОКАЗАТЬ МОД ВСЕМ СТАЛКЕРАМ
+                    </button>
+                    
+                    <p style="text-align: center; margin-top: 20px; color: #aaa; font-size: 0.9rem;">
+                        <i class="fas fa-exclamation-circle"></i> Мод появится вверху списка "Новые моды" и будет виден всем посетителям сайта
+                    </p>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Подвал -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3 class="text-glow">ПЕРЕХОДНИК STALKER</h3>
+                    <p style="margin-bottom: 20px;">Показывайте свои модификации всему сталкер-сообществу. Загрузили мод — его уже видят все!</p>
+                    <div style="display: flex; gap: 15px;">
+                        <div style="background-color: rgba(227, 178, 60, 0.1); padding: 10px; border-radius: 5px;">
+                            <i class="fas fa-users" style="color: var(--accent);"></i>
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--accent);" id="total-mods-count">0</div>
+                            <div style="font-size: 0.8rem;">модов</div>
+                        </div>
+                        <div style="background-color: rgba(26, 95, 35, 0.1); padding: 10px; border-radius: 5px;">
+                            <i class="fas fa-eye" style="color: var(--accent);"></i>
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--accent);" id="total-views-count">0</div>
+                            <div style="font-size: 0.8rem;">просмотров</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="text-glow">Как это работает</h3>
+                    <ul>
+                        <li>Загружаете описание мода</li>
+                        <li>Мод сразу виден всем</li>
+                        <li>Появляется в "Новых модах"</li>
+                        <li>Без регистрации и ссылок</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="text-glow">Популярные площадки</h3>
+                    <ul>
+                        <li><a href="#">ВКонтакте группы сталкеров</a></li>
+                        <li><a href="#">Telegram-чаты по моддингу</a></li>
+                        <li><a href="#">Discord сервера</a></li>
+                        <li><a href="#">Игровые форумы</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2023 ПЕРЕХОДНИК STALKER. Ваши моды видны всем сразу после загрузки.</p>
+                <p>Все права на игру S.T.A.L.K.E.R. принадлежат GSC Game World.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно информации о моде -->
+    <div id="mod-info-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-mod-info">&times;</span>
+            <div id="mod-info-content">
+                <!-- Информация о моде загружается через JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Уведомление -->
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text">Уведомление</span>
+    </div>
+
+    <script>
+        // Глобальные переменные
+        let allModsData = JSON.parse(localStorage.getItem('stalkerPortalMods')) || [];
+        let totalViews = parseInt(localStorage.getItem('stalkerPortalViews')) || 0;
+        let newMods = JSON.parse(localStorage.getItem('stalkerNewMods')) || [];
+        
+        // Настоящие популярные моды для начала
+        const realMods = [
+            {
+                id: 1,
+                title: "STALKER Anomaly 1.5.2",
+                game: "АНТОЛОГИЯ",
+                description: "Масштабный бесплатный мод на движке X-Ray 1.5, объединяющий все три части в открытом мире с улучшенной графикой, продвинутой системой выживания и сотнями заданий. Самый популярный мод сообщества.",
+                author: "Team Epic",
+                version: "1.5.2",
+                downloadLink: "https://www.moddb.com/mods/stalker-anomaly/downloads",
+                image: "",
+                date: "2023-10-15",
+                views: 1287,
+                isRealMod: true,
+                type: "overhaul"
+            },
+            {
+                id: 2,
+                title: "Call of Chernobyl",
+                game: "Зов Припяти",
+                description: "Мод, объединяющий все локации из трилогии в один огромный открытый мир с свободным перемещением между ними. Основа для многих других модификаций.",
+                author: "TeamJelly",
+                version: "1.4.22",
+                downloadLink: "https://www.moddb.com/mods/call-of-chernobyl",
+                image: "",
+                date: "2023-09-28",
+                views: 845,
+                isRealMod: true,
+                type: "sandbox"
+            },
+            {
+                id: 3,
+                title: "Gunslinger Mod",
+                game: "Тень Чернобыля",
+                description: "Продвинутый движок для Тени Чернобыля с поддержкой современных технологий, улучшенной графикой и полной переработкой анимаций оружия.",
+                author: "OGSR Team",
+                version: "0.9.0",
+                downloadLink: "https://www.moddb.com/mods/gunslinger",
+                image: "",
+                date: "2023-10-05",
+                views: 932,
+                isRealMod: true,
+                type: "graphics"
+            },
+            {
+                id: 4,
+                title: "Dead Air",
+                game: "Зов Припяти",
+                description: "Хардкорный мод с упором на реализм, сложное выживание и атмосферу безысходности в Зоне. Для опытных сталкеров.",
+                author: "Артём Соляников",
+                version: "1.0.1",
+                downloadLink: "https://www.moddb.com/mods/dead-air",
+                image: "",
+                date: "2023-09-15",
+                views: 621,
+                isRealMod: true,
+                type: "hardcore"
+            },
+            {
+                id: 5,
+                title: "Misery 2.2",
+                game: "Зов Припяти",
+                description: "Легендарный мод, делающий игру максимально сложной и реалистичной. Полная переработка механик, экономики и баланса игры.",
+                author: "Misery Team",
+                version: "2.2",
+                downloadLink: "https://www.moddb.com/mods/stalker-misery",
+                image: "",
+                date: "2023-10-01",
+                views: 1103,
+                isRealMod: true,
+                type: "hardcore"
+            },
+            {
+                id: 6,
+                title: "Autumn Aurora 2",
+                game: "Тень Чернобыля",
+                description: "Графический мод с полным переосмыслением визуальной составляющей игры в осенних тонах. Улучшенные текстуры, освещение и погода.",
+                author: "Artistpavel",
+                version: "2.1",
+                downloadLink: "https://www.moddb.com/mods/autumn-aurora-2",
+                image: "",
+                date: "2023-09-20",
+                views: 734,
+                isRealMod: true,
+                type: "graphics"
+            }
+        ];
+
+        // DOM элементы
+        const modsContainer = document.getElementById('mods-container');
+        const newModsContainer = document.getElementById('new-mods-container');
+        const modUploadForm = document.getElementById('mod-upload-form');
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notification-text');
+        const totalViewsSpan = document.getElementById('total-views');
+        const totalModsCount = document.getElementById('total-mods-count');
+        const totalViewsCount = document.getElementById('total-views-count');
+        const showAllModsBtn = document.getElementById('show-all-mods-btn');
+        
+        // Модальные окна
+        const modInfoModal = document.getElementById('mod-info-modal');
+        const closeModInfo = document.getElementById('close-mod-info');
+        const modInfoContent = document.getElementById('mod-info-content');
+        
+        // Навигационные ссылки
+        const homeLink = document.getElementById('home-link');
+        const uploadLink = document.getElementById('upload-link');
+        const newModsLink = document.getElementById('new-mods-link');
+        
+        // Секции
+        const heroSection = document.getElementById('hero-section');
+        const allModsSection = document.getElementById('all-mods-section');
+        const newModsSection = document.getElementById('new-mods-section');
+        const uploadSection = document.getElementById('upload-section');
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализируем данные если они пустые
+            if (allModsData.length === 0) {
+                allModsData = realMods;
+                localStorage.setItem('stalkerPortalMods', JSON.stringify(allModsData));
+            }
+            
+            // Инициализируем новые моды (последние 3 дня)
+            updateNewMods();
+            
+            updateTotalViews();
+            renderAllMods();
+            renderNewMods();
+            setupEventListeners();
+            setActiveNav(homeLink);
+            
+            // Обновляем счетчики в футере
+            totalModsCount.textContent = allModsData.length;
+            totalViewsCount.textContent = totalViews.toLocaleString();
+        });
+
+        // Обновить список новых модов (последние 3 дня)
+        function updateNewMods() {
+            const threeDaysAgo = new Date();
+            threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+            
+            newMods = allModsData.filter(mod => {
+                const modDate = new Date(mod.date);
+                return modDate >= threeDaysAgo && !mod.isRealMod;
+            }).sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            localStorage.setItem('stalkerNewMods', JSON.stringify(newMods));
+        }
+
+        // Обновить счетчик просмотров
+        function updateTotalViews() {
+            totalViews++;
+            localStorage.setItem('stalkerPortalViews', totalViews);
+            totalViewsSpan.textContent = totalViews.toLocaleString();
+            totalViewsCount.textContent = totalViews.toLocaleString();
+        }
+
+        // Рендеринг всех модов
+        function renderAllMods() {
+            modsContainer.innerHTML = '';
+            totalModsCount.textContent = allModsData.length;
+            
+            // Сортируем по дате (новые сначала)
+            const sortedMods = [...allModsData].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (sortedMods.length === 0) {
+                modsContainer.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 50px; background-color: rgba(20, 25, 20, 0.7); border-radius: 15px;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 3.5rem; color: var(--accent); margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(227, 178, 60, 0.5));"></i>
+                        <h3 style="color: var(--accent); margin-bottom: 15px; text-shadow: 0 0 10px rgba(227, 178, 60, 0.5);">Модов пока нет</h3>
+                        <p style="margin-bottom: 25px;">Будьте первым, кто покажет свой мод всему сталкер-сообществу!</p>
+                        <button class="btn btn-accent" style="margin-top: 20px;" id="upload-first-mod">
+                            <i class="fas fa-upload"></i> Показать свой мод
+                        </button>
+                    </div>
+                `;
+                
+                document.getElementById('upload-first-mod')?.addEventListener('click', () => {
+                    showSection('upload');
+                    setActiveNav(uploadLink);
+                });
+                return;
+            }
+            
+            sortedMods.forEach(mod => {
+                const isNew = newMods.some(newMod => newMod.id === mod.id);
+                const modCard = document.createElement('div');
+                modCard.className = 'mod-card';
+                modCard.innerHTML = `
+                    ${isNew ? '<div class="new-badge">НОВЫЙ</div>' : ''}
+                    <div class="mod-image">
+                        ${mod.image ? 
+                            `<img src="${mod.image}" alt="${mod.title}" loading="lazy">` :
+                            `<div class="image-placeholder">
+                                <i class="fas fa-file-archive"></i>
+                                <span style="color: #aaa; font-size: 0.9rem;">${mod.isRealMod ? 'Настоящий мод' : 'Мод сообщества'}</span>
+                            </div>`
+                        }
+                    </div>
+                    <div class="mod-content">
+                        <div class="mod-title">
+                            <span>${mod.title}</span>
+                            <span class="mod-game">${mod.game}</span>
+                        </div>
+                        <div class="mod-author">
+                            <div class="author-avatar">${mod.author.charAt(0)}</div>
+                            <span>${mod.author}</span>
+                            <span style="margin-left: auto; font-size: 0.8rem; color: #aaa;">
+                                <i class="fas fa-eye"></i> ${mod.views || 0}
+                            </span>
+                        </div>
+                        <p class="mod-description">${mod.description}</p>
+                        
+                        <div style="margin: 15px 0;">
+                            ${mod.version ? `<span style="font-size: 0.9rem; color: var(--accent); background-color: rgba(227, 178, 60, 0.1); padding: 5px 10px; border-radius: 5px;">v${mod.version}</span>` : ''}
+                            ${mod.isRealMod ? `<span style="font-size: 0.9rem; color: var(--success); background-color: rgba(60, 165, 76, 0.1); padding: 5px 10px; border-radius: 5px; margin-left: 10px;"><i class="fas fa-check-circle"></i> Настоящий</span>` : ''}
+                        </div>
+                        
+                        <div class="mod-stats">
+                            <div class="mod-stat">
+                                <i class="fas fa-calendar"></i>
+                                <span>${formatDate(mod.date)}</span>
+                            </div>
+                            <div class="mod-stat">
+                                <i class="fas fa-download"></i>
+                                <span>${mod.downloadLink ? 'Есть ссылка' : 'Без ссылки'}</span>
+                            </div>
+                        </div>
+                        <button class="download-btn" onclick="showModInfo(${mod.id})">
+                            <i class="fas fa-info-circle"></i> Посмотреть подробности
+                        </button>
+                    </div>
+                `;
+                
+                modsContainer.appendChild(modCard);
+            });
+        }
+
+        // Рендеринг новых модов
+        function renderNewMods() {
+            newModsContainer.innerHTML = '';
+            
+            if (newMods.length === 0) {
+                newModsContainer.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 50px; background-color: rgba(20, 25, 20, 0.7); border-radius: 15px;">
+                        <i class="fas fa-star" style="font-size: 3.5rem; color: var(--accent); margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(227, 178, 60, 0.5));"></i>
+                        <h3 style="color: var(--accent); margin-bottom: 15px; text-shadow: 0 0 10px rgba(227, 178, 60, 0.5);">Новых модов пока нет</h3>
+                        <p style="margin-bottom: 25px;">Загрузите свой мод первым и он появится здесь!</p>
+                        <button class="btn btn-accent" style="margin-top: 20px;" onclick="showSection('upload'); setActiveNav(uploadLink);">
+                            <i class="fas fa-upload"></i> Показать свой мод
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            newMods.forEach(mod => {
+                const modCard = document.createElement('div');
+                modCard.className = 'mod-card';
+                modCard.innerHTML = `
+                    <div class="new-badge">НОВЫЙ</div>
+                    <div class="mod-image">
+                        ${mod.image ? 
+                            `<img src="${mod.image}" alt="${mod.title}" loading="lazy">` :
+                            `<div class="image-placeholder">
+                                <i class="fas fa-bolt"></i>
+                                <span style="color: #aaa; font-size: 0.9rem;">Новый мод</span>
+                            </div>`
+                        }
+                    </div>
+                    <div class="mod-content">
+                        <div class="mod-title">
+                            <span>${mod.title}</span>
+                            <span class="mod-game">${mod.game}</span>
+                        </div>
+                        <div class="mod-author">
+                            <div class="author-avatar">${mod.author.charAt(0)}</div>
+                            <span>${mod.author}</span>
+                            <span style="margin-left: auto; font-size: 0.8rem; color: #aaa;">
+                                <i class="fas fa-eye"></i> ${mod.views || 0}
+                            </span>
+                        </div>
+                        <p class="mod-description">${mod.description}</p>
+                        
+                        <div style="margin: 15px 0;">
+                            ${mod.version ? `<span style="font-size: 0.9rem; color: var(--accent); background-color: rgba(227, 178, 60, 0.1); padding: 5px 10px; border-radius: 5px;">v${mod.version}</span>` : ''}
+                            <span style="font-size: 0.9rem; color: #ff6600; background-color: rgba(255, 102, 0, 0.1); padding: 5px 10px; border-radius: 5px; margin-left: 10px;">
+                                <i class="fas fa-fire"></i> Свежий
+                            </span>
+                        </div>
+                        
+                        <div class="mod-stats">
+                            <div class="mod-stat">
+                                <i class="fas fa-clock"></i>
+                                <span>${getTimeAgo(mod.date)}</span>
+                            </div>
+                            <div class="mod-stat">
+                                <i class="fas fa-broadcast-tower"></i>
+                                <span>Виден всем</span>
+                            </div>
+                        </div>
+                        <button class="download-btn" onclick="showModInfo(${mod.id})">
+                            <i class="fas fa-eye"></i> Посмотреть мод
+                        </button>
+                    </div>
+                `;
+                
+                newModsContainer.appendChild(modCard);
+            });
+        }
+
+        // Форматирование даты
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) {
+                return 'Сегодня';
+            } else if (diffDays === 1) {
+                return 'Вчера';
+            } else if (diffDays < 7) {
+                return `${diffDays} дней назад`;
+            } else {
+                return date.toLocaleDateString('ru-RU');
+            }
+        }
+
+        // Получить "сколько времени назад"
+        function getTimeAgo(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 60) {
+                return `${diffMins} мин назад`;
+            } else if (diffHours < 24) {
+                return `${diffHours} ч назад`;
+            } else if (diffDays === 1) {
+                return 'Вчера';
+            } else {
+                return `${diffDays} дн назад`;
+            }
+        }
+
+        // Показать информацию о моде
+        window.showModInfo = function(modId) {
+            const mod = allModsData.find(m => m.id === modId);
+            if (!mod) return;
+            
+            // Увеличиваем счетчик просмотров
+            mod.views = (mod.views || 0) + 1;
+            
+            // Обновляем данные
+            const modIndex = allModsData.findIndex(m => m.id === modId);
+            if (modIndex !== -1) {
+                allModsData[modIndex] = mod;
+                localStorage.setItem('stalkerPortalMods', JSON.stringify(allModsData));
+            }
+            
+            updateTotalViews();
+            updateNewMods();
+            
+            modInfoContent.innerHTML = `
+                <h2 style="color: var(--accent); margin-bottom: 15px; text-shadow: 0 0 10px rgba(227, 178, 60, 0.5);">${mod.title}</h2>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px; flex-wrap: wrap;">
+                    <span class="mod-game">${mod.game}</span>
+                    ${mod.isRealMod ? `
+                        <span style="background: linear-gradient(135deg, var(--success), #2a8c3a); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; box-shadow: 0 3px 10px rgba(60, 165, 76, 0.3);">
+                            <i class="fas fa-check-circle"></i> Настоящий популярный мод
+                        </span>
+                    ` : `
+                        <span style="background: linear-gradient(135deg, var(--accent), #d19c2a); color: var(--dark); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; box-shadow: 0 3px 10px rgba(227, 178, 60, 0.3);">
+                            <i class="fas fa-users"></i> Мод сообщества
+                        </span>
+                    `}
+                    ${newMods.some(m => m.id === mod.id) ? `
+                        <span style="background: linear-gradient(135deg, #ff3300, #ff6600); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; box-shadow: 0 3px 10px rgba(255, 51, 0, 0.3);">
+                            <i class="fas fa-star"></i> НОВЫЙ
+                        </span>
+                    ` : ''}
+                </div>
+                
+                <div style="margin-bottom: 25px; padding: 25px; background-color: rgba(10, 15, 10, 0.8); border-radius: 10px; border: 1px solid rgba(227, 178, 60, 0.2);">
+                    <p style="font-size: 1.1rem; line-height: 1.6;">${mod.description}</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">
+                    <div style="background-color: rgba(10, 15, 10, 0.8); padding: 20px; border-radius: 10px; border: 1px solid rgba(227, 178, 60, 0.2);">
+                        <div style="font-size: 0.9rem; color: #aaa; margin-bottom: 5px;">Автор</div>
+                        <div style="font-weight: bold; font-size: 1.2rem; color: var(--accent);">${mod.author}</div>
+                    </div>
+                    <div style="background-color: rgba(10, 15, 10, 0.8); padding: 20px; border-radius: 10px; border: 1px solid rgba(227, 178, 60, 0.2);">
+                        <div style="font-size: 0.9rem; color: #aaa; margin-bottom: 5px;">Версия</div>
+                        <div style="font-weight: bold; font-size: 1.2rem; color: var(--accent);">${mod.version || '1.0'}</div>
+                    </div>
+                    <div style="background-color: rgba(10, 15, 10, 0.8); padding: 20px; border-radius: 10px; border: 1px solid rgba(227, 178, 60, 0.2);">
+                        <div style="font-size: 0.9rem; color: #aaa; margin-bottom: 5px;">Дата публикации</div>
+                        <div style="font-weight: bold; font-size: 1.2rem; color: var(--accent);">${formatDate(mod.date)}</div>
+                    </div>
+                    <div style="background-color: rgba(10, 15, 10, 0.8); padding: 20px; border-radius: 10px; border: 1px solid rgba(227, 178, 60, 0.2);">
+                        <div style="font-size: 0.9rem; color: #aaa; margin-bottom: 5px;">Просмотров</div>
+                        <div style="font-weight: bold; font-size: 1.2rem; color: var(--accent);">${mod.views || 0}</div>
+                    </div>
+                </div>
+                
+                ${mod.downloadLink ? `
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: var(--accent); margin-bottom: 15px; text-shadow: 0 0 5px rgba(227, 178, 60, 0.3);">Ссылка для скачивания:</h3>
+                        <div style="background-color: rgba(10, 15, 10, 0.8); padding: 20px; border-radius: 10px; border: 1px solid rgba(227, 178, 60, 0.2); word-break: break-all;">
+                            <a href="${mod.downloadLink}" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: bold; font-size: 1.1rem;">
+                                <i class="fas fa-external-link-alt"></i> ${mod.downloadLink}
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; margin-top: 30px;">
+                        <a href="${mod.downloadLink}" target="_blank" class="download-btn" style="flex: 1; text-align: center;">
+                            <i class="fas fa-download"></i> Скачать мод
+                        </a>
+                        <button class="share-mod-btn" onclick="copyToClipboard('${mod.downloadLink}')" style="flex: 1; text-align: center;">
+                            <i class="fas fa-copy"></i> Копировать ссылку
+                        </button>
+                    </div>
+                ` : `
+                    <div style="margin-bottom: 30px; padding: 20px; background-color: rgba(20, 25, 20, 0.8); border-radius: 10px; border-left: 4px solid var(--accent);">
+                        <h3 style="color: var(--accent); margin-bottom: 10px; text-shadow: 0 0 5px rgba(227, 178, 60, 0.3);">
+                            <i class="fas fa-info-circle"></i> Без ссылки для скачивания
+                        </h3>
+                        <p>Автор пока не добавил ссылку для скачивания этого мода.</p>
+                    </div>
+                `}
+                
+                <div style="margin-top: 30px; padding: 20px; background-color: rgba(227, 178, 60, 0.1); border-radius: 10px; border-left: 4px solid var(--accent);">
+                    <strong style="color: var(--accent);"><i class="fas fa-eye"></i> Этот мод видят все сталкеры:</strong>
+                    <p style="margin-top: 10px; color: #ccc;">Мод отображается в общем списке и доступен всем посетителям сайта без дополнительных ссылок.</p>
+                </div>
+            `;
+            
+            modInfoModal.style.display = 'block';
+        };
+
+        // Настройка обработчиков событий
+        function setupEventListeners() {
+            // Навигация
+            homeLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showSection('all');
+                setActiveNav(homeLink);
+            });
+            
+            uploadLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showSection('upload');
+                setActiveNav(uploadLink);
+            });
+            
+            newModsLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showSection('new');
+                setActiveNav(newModsLink);
+            });
+            
+            // Кнопка "Показать все моды"
+            showAllModsBtn.addEventListener('click', () => {
+                showSection('all');
+                setActiveNav(homeLink);
+            });
+            
+            // Форма загрузки мода
+            modUploadForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const authorName = document.getElementById('author-name').value;
+                const modName = document.getElementById('mod-name').value;
+                const modGame = document.getElementById('mod-game').value;
+                const modDescription = document.getElementById('mod-description').value;
+                
+                if (!authorName || !modName || !modGame || !modDescription) {
+                    showNotification('Заполните все обязательные поля!', 'error');
+                    return;
+                }
+                
+                // Создаем новый мод
+                const newMod = {
+                    id: Date.now(),
+                    title: modName,
+                    game: modGame,
+                    description: modDescription,
+                    author: authorName,
+                    version: document.getElementById('mod-version').value || '1.0',
+                    downloadLink: document.getElementById('download-link').value || null,
+                    image: document.getElementById('mod-image').value || null,
+                    date: new Date().toISOString(),
+                    views: 0,
+                    isRealMod: false
+                };
+                
+                // Добавляем в начало массива
+                allModsData.unshift(newMod);
+                
+                // Сохраняем
+                localStorage.setItem('stalkerPortalMods', JSON.stringify(allModsData));
+                
+                // Очищаем форму
+                modUploadForm.reset();
+                
+                // Показываем уведомление
+                showNotification(`Мод "${modName}" теперь видят все сталкеры! Он появился вверху списка.`, 'success');
+                
+                // Обновляем списки модов
+                updateNewMods();
+                renderAllMods();
+                renderNewMods();
+                
+                // Показываем секцию новых модов
+                showSection('new');
+                setActiveNav(newModsLink);
+            });
+            
+            // Кнопки поделиться в герое
+            document.getElementById('share-vk').addEventListener('click', function(e) {
+                e.preventDefault();
+                shareToVK();
+            });
+            
+            document.getElementById('share-telegram').addEventListener('click', function(e) {
+                e.preventDefault();
+                shareToTelegram();
+            });
+            
+            document.getElementById('share-discord').addEventListener('click', function(e) {
+                e.preventDefault();
+                shareToDiscord();
+            });
+            
+            // Закрытие модального окна
+            closeModInfo.addEventListener('click', () => {
+                modInfoModal.style.display = 'none';
+            });
+            
+            // Закрытие модального окна при клике вне его
+            window.addEventListener('click', (e) => {
+                if (e.target === modInfoModal) {
+                    modInfoModal.style.display = 'none';
+                }
+            });
+        }
+
+        // Показать определенную секцию
+        function showSection(section) {
+            heroSection.style.display = 'none';
+            allModsSection.style.display = 'none';
+            newModsSection.style.display = 'none';
+            uploadSection.style.display = 'none';
+            
+            switch(section) {
+                case 'all':
+                    heroSection.style.display = 'block';
+                    allModsSection.style.display = 'block';
+                    break;
+                case 'upload':
+                    uploadSection.style.display = 'block';
+                    break;
+                case 'new':
+                    newModsSection.style.display = 'block';
+                    break;
+            }
+            
+            // Прокрутка к началу
+            window.scrollTo(0, 0);
+        }
+
+        // Установка активной навигации
+        function setActiveNav(activeLink) {
+            // Убираем активный класс у всех ссылок
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Добавляем активный класс к выбранной ссылке
+            activeLink.classList.add('active');
+        }
+
+        // Вспомогательные функции
+        window.copyToClipboard = function(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('Ссылка скопирована в буфер обмена!', 'success');
+            }).catch(err => {
+                console.error('Ошибка копирования: ', err);
+                showNotification('Не удалось скопировать ссылку', 'error');
+            });
+        };
+
+        window.shareToVK = function() {
+            const link = window.location.href;
+            const title = 'ПЕРЕХОДНИК STALKER - Покажи свои моды всем сталкерам!';
+            window.open(`https://vk.com/share.php?url=${encodeURIComponent(link)}&title=${encodeURIComponent(title)}`, '_blank');
+        };
+
+        window.shareToTelegram = function() {
+            const link = window.location.href;
+            const text = 'Посмотрите ПЕРЕХОДНИК STALKER - показывайте свои моды всему сообществу!';
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`, '_blank');
+        };
+
+        window.shareToDiscord = function() {
+            const link = window.location.href;
+            const message = `**ПЕРЕХОДНИК STALKER**\nПокажите свои моды всем сталкерам!\n${link}`;
+            navigator.clipboard.writeText(message).then(() => {
+                showNotification('Сообщение для Discord скопировано! Вставьте его в чат.', 'success');
+            });
+        };
+
+        // Показать уведомление
+        function showNotification(text, type = 'success') {
+            notificationText.textContent = text;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Добавим несколько примеров модов от сообщества при первом запуске
+        setTimeout(() => {
+            const communityModsExist = allModsData.some(mod => !mod.isRealMod);
+            if (!communityModsExist) {
+                // Добавляем несколько примеров модов от сообщества
+                const communityExamples = [
+                    {
+                        id: 1001,
+                        title: "Улучшенная погода для Зова Припяти",
+                        game: "Зов Припяти",
+                        description: "Мой мод улучшает систему погоды, добавляет новые эффекты дождя, тумана и грозы. Полностью переработаны шейдеры и текстуры облаков.",
+                        author: "Погодник",
+                        version: "1.2",
+                        downloadLink: "",
+                        image: "",
+                        date: new Date(Date.now() - 3600000).toISOString(), // 1 час назад
+                        views: 12,
+                        isRealMod: false
+                    },
+                    {
+                        id: 1002,
+                        title: "Новые квесты для Тени Чернобыля",
+                        game: "Тень Чернобыля",
+                        description: "Добавил 15 новых сюжетных квестов с уникальными персонажами и локациями. Полностью озвученые диалоги и интересные сюжетные повороты.",
+                        author: "Квестодел",
+                        version: "0.9",
+                        downloadLink: "https://drive.google.com/example-mod",
+                        image: "",
+                        date: new Date(Date.now() - 86400000).toISOString(), // 1 день назад
+                        views: 28,
+                        isRealMod: false
+                    }
+                ];
+                
+                allModsData.unshift(...communityExamples);
+                localStorage.setItem('stalkerPortalMods', JSON.stringify(allModsData));
+                updateNewMods();
+                renderAllMods();
+                renderNewMods();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
